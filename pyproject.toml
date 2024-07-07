@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "rent-games"
+version = "0.1.0"
+description = ""
+authors = ["dmkisel <i@dkisel.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.0"
+uvicorn = "^0.30.1"
+sqlalchemy = "^2.0.31"
+alembic = "^1.13.2"
+telebot = "^0.0.5"
+celery = "^5.4.0"
+asyncio = "^3.4.3"
+streamlit = "^1.36.0"
+pg8000 = "^1.31.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
