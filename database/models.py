@@ -4,7 +4,8 @@ from sqlalchemy import (Column,
                         String,
                         ForeignKey,
                         DateTime,
-                        Float)
+                        Float,
+                        Boolean, Table)
 from sqlalchemy.orm import (relationship,
                             DeclarativeBase)
 
@@ -12,41 +13,61 @@ from sqlalchemy.orm import (relationship,
 class Base(DeclarativeBase):
     id = Column(Integer, primary_key=True, index=True)
 
+class User(Base):
+    __tablename__ = 'user'
+    username = Column(String, unique=True)
+    email = Column(String, unique=True)
+    telegram = Column(String, unique=True)
+    chat_telegram = Column(String, unique=True)
+    hashed_password = Column(String)
+    is_active = Column(Boolean, default=True, nullable=False)
+    is_superuser = Column(Boolean, default=False, nullable=False)
+    is_verified = Column(Boolean, default=False, nullable=False)
+    carts = relationship('Cart', back_populates='user')
 
-class Users(Base):
-    __tablename__ = 'users'
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    bookings = relationship("Booking", back_populates="user")
-    orders = relationship("Order", back_populates="user")
+
+class TypePrice(Base):
+    __tablename__ = 'type_price'
+    name = Column(String, unique=True)
 
 
 class Game(Base):
-    __tablename__ = 'games'
+    __tablename__ = 'game'
     title = Column(String, index=True)
     description = Column(String)
     price = Column(Float)
-    available = Column(Integer)
-    bookings = relationship("Booking", back_populates="game")
-    orders = relationship("Order", back_populates="game")
+    price_type = Column(Integer, ForeignKey("type_price.id"))
+    quantity = Column(Integer, default=0)
+    is_active = Column(Boolean, default=False)
+    carts = relationship('Cart', back_populates='games')
+
+    def deactivate_at_zero(self):
+        if self.quantity == 0 or self.price == 0:
+            self.is_active = False
+        if self.quantity > 0 and self.price > 0:
+            self.is_active = True
+        return
 
 
-class Rent(Base):
-    __tablename__ = 'rent'
-    user_id = Column(Integer, ForeignKey("users.id"))
-    game_id = Column(Integer, ForeignKey("games.id"))
-    date = Column(DateTime, default=datetime.now())
-    time = Column(DateTime)
-    user = relationship("User", back_populates="bookings")
-    game = relationship("Game", back_populates="bookings")
+cart_games = Table('cart_games', Base.metadata,
+                   Column('cart_id', Integer, ForeignKey('cart.id'), primary_key=True),
+                   Column('game_id', Integer, ForeignKey('game.id'), primary_key=True)
+                   )
 
 
-class Orders(Base):
-    __tablename__ = 'orders'
-    user_id = Column(Integer, ForeignKey("users.id"))
-    game_id = Column(Integer, ForeignKey("games.id"))
-    status = Column(String, default="pending")  # Status of the order
-    date = Column(DateTime, default=datetime.now())
-    user = relationship("User", back_populates="orders")
-    game = relationship("Game", back_populates="orders")
+class Cart(Base):
+    __tablename__ = 'cart'
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship('User', back_populates='carts')
+    games = relationship('Game', secondary=cart_games, back_populates='carts')
+
+
+class Payment(Base):
+    __tablename__ = 'payment'
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    summ = Column(Float, nullable=False)
+    currency = Column(String, nullable=False)
+    descriptions = Column(String, nullable=False)
+    payment = Column(String, nullable=False)
+    state = Column(String, nullable=False, default='create')
+

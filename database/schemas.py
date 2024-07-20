@@ -1,77 +1,42 @@
-from datetime import datetime
-from typing import List, Optional, Any
+from typing import Optional
 from pydantic import BaseModel
 
 
+# схемы игр
+
 class GameBase(BaseModel):
+    id: int
     title: str
-    description: str
+    description: Optional[str] = None
     price: float
-    available: int
+    price_type: int
+    is_active: Optional[bool] = True
 
 
 class GameCreate(GameBase):
+    quantity: int
     pass
 
 
 class Game(GameBase):
-    id: int
-    class Config:
-        orm_mode = True
-
-
-class UserBase(BaseModel):
-    username: str
-    email: str
-
-
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
-    id: int
-    bookings: List['Booking'] = []
-    orders: List['Order'] = []
 
     class Config:
         orm_mode = True
 
 
-class RentBase(BaseModel):
+# схемы корзины
+
+class CartBase(BaseModel):
     user_id: int
-    game_id: int
-    date: datetime
-    time: datetime
 
 
-class RentCreate(RentBase):
+class CartCreate(CartBase):
     pass
 
 
-class Rent(RentBase):
+class Cart(CartBase):
     id: int
-    user: User
-    game: Game
-
-    class Config:
-        orm_mode = True
-
-
-class OrderBase(BaseModel):
-    user_id: int
-    game_id: int
-    status: str
-
-
-class OrderCreate(OrderBase):
-    pass
-
-
-class Order(OrderBase):
-    id: int
-    user: User
-    game: Game
+    games: list[CartBase]
 
     class Config:
         orm_mode = True
