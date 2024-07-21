@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
-
+from backend.auth.schemas import UserRead
 
 # схемы игр
 
@@ -24,19 +24,24 @@ class Game(GameBase):
         orm_mode = True
 
 
+class User(UserRead):
+    carts: List['Cart'] = []
+
 # схемы корзины
+
 
 class CartBase(BaseModel):
     user_id: int
 
 
 class CartCreate(CartBase):
-    pass
+    game_ids: List[int]
 
 
 class Cart(CartBase):
     id: int
-    games: list[CartBase]
+    user: User
+    games: List[Game] = []
 
     class Config:
         orm_mode = True

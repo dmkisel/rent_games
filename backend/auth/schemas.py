@@ -27,5 +27,3 @@ class UserCreate(schemas.BaseUserCreate):
     is_verified: Optional[bool] = False
 
 
-# class UserUpdate(schemas.BaseUserUpdate):
-#     pass

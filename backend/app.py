@@ -11,6 +11,7 @@ import uvicorn
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi import APIRouter
 from fastapi_users import fastapi_users, FastAPIUsers
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -80,7 +81,21 @@ async def get_game(game_id: int, db: AsyncSession = Depends(get_db)):
 
 #корзина
 
+@app.post("/carts/", response_model=schemas.Cart)
+async def create_cart(cart: schemas.CartCreate, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+    db_cart = await crud.create_carts(db, cart)
 
+    # Add games to the cart
+    if cart.game_ids:
+        db_cart = crud.add_to_cart(db, cart, db_cart)
+    return db_cart
+
+@app.get("/carts/{cart_id}", response_model=schemas.Cart)
+async def read_cart(cart_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+    db_cart = crud.read_carts(db, cart_id)
+    if db_cart is None:
+        raise HTTPException(status_code=404, detail="Cart not found")
+    return db_cart
 
 #Покупка
 
