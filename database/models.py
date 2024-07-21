@@ -31,6 +31,12 @@ class TypePrice(Base):
     name = Column(String, unique=True)
 
 
+cart_games = Table('cart_games', Base.metadata,
+                   Column('cart_id', Integer, ForeignKey('cart.id'), primary_key=True),
+                   Column('game_id', Integer, ForeignKey('game.id'), primary_key=True)
+                   )
+
+
 class Game(Base):
     __tablename__ = 'game'
     title = Column(String, index=True)
@@ -39,7 +45,7 @@ class Game(Base):
     price_type = Column(Integer, ForeignKey("type_price.id"))
     quantity = Column(Integer, default=0)
     is_active = Column(Boolean, default=False)
-    carts = relationship('Cart', back_populates='games')
+    carts = relationship('Cart', secondary=cart_games, back_populates='games')
 
     def deactivate_at_zero(self):
         if self.quantity == 0 or self.price == 0:
@@ -47,12 +53,6 @@ class Game(Base):
         if self.quantity > 0 and self.price > 0:
             self.is_active = True
         return
-
-
-cart_games = Table('cart_games', Base.metadata,
-                   Column('cart_id', Integer, ForeignKey('cart.id'), primary_key=True),
-                   Column('game_id', Integer, ForeignKey('game.id'), primary_key=True)
-                   )
 
 
 class Cart(Base):
@@ -64,10 +64,10 @@ class Cart(Base):
 
 class Payment(Base):
     __tablename__ = 'payment'
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    summ = Column(Float, nullable=False)
-    currency = Column(String, nullable=False)
+    cart_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    amount = Column(Float, nullable=False)
     descriptions = Column(String, nullable=False)
     payment = Column(String, nullable=False)
     state = Column(String, nullable=False, default='create')
+
 

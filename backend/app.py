@@ -81,23 +81,37 @@ async def get_game(game_id: int, db: AsyncSession = Depends(get_db)):
 
 #корзина
 
-@app.post("/carts/", response_model=schemas.Cart)
+@app.post("/carts/", response_model=schemas.Cart, tags=["carts"])
 async def create_cart(cart: schemas.CartCreate, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     db_cart = await crud.create_carts(db, cart)
 
-    # Add games to the cart
-    if cart.game_ids:
-        db_cart = crud.add_to_cart(db, cart, db_cart)
+    # if cart.game_ids:
+    #     db_cart = await crud.add_to_cart(db, cart, db_cart)
+    #
+    # # Явное получение атрибутов перед возвратом
+    # db_user = db_cart.user
+    # db_games = db_cart.games
+    #
+    # return schemas.Cart(
+    #     id=db_cart.id,
+    #     user_id=db_cart.user_id,
+    #     user=schemas.User(id=db_user.id, name=db_user.name),
+    #     games=[schemas.Game(id=game.id, title=game.title, genre=game.genre) for game in db_games]
+    # )
     return db_cart
 
-@app.get("/carts/{cart_id}", response_model=schemas.Cart)
+@app.get("/carts/{cart_id}", response_model=schemas.Cart, tags=["carts"])
 async def read_cart(cart_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
-    db_cart = crud.read_carts(db, cart_id)
+    db_cart = await crud.read_carts(db, cart_id)
     if db_cart is None:
         raise HTTPException(status_code=404, detail="Cart not found")
-    return db_cart
-
-#Покупка
+    await db.refresh(db_cart)
+    db_user = db_cart.user
+    db_games = db_cart.games
+    return schemas.Cart(id=db_cart.id,
+                        user_id=db_cart.user_id,
+                        user=schemas.User(id=db_user.id, name=db_user.name),
+                        games=[schemas.Game(id=game.id, title=game.title) for game in db_games])
 
 
 

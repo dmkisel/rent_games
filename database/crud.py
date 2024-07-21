@@ -49,25 +49,27 @@ async def update_game(db: AsyncSession, up_game: schemas.GameCreate, game_id: in
 
 # crud для корзины
 
-async def create_carts(db: AsyncSession, cart: schemas.CartCreate):
-    db_cart = models.Cart(user_id=cart.user_id)
+async def create_carts(db: AsyncSession, cart: schemas.CartCreate) -> models.Cart:
+    db_cart = models.Cart(user_id=cart.user_id,)
     db.add(db_cart)
     await db.commit()
     await db.refresh(db_cart)
     return db_cart
 
 
-async def add_to_cart(db: AsyncSession, cart: schemas.CartCreate, db_cart: schemas.Cart):
-    result = await db.execute(select(models.Game).filter(models.Game.id.in_(cart.game_ids)))
-    game = result.scalars().all()
-    db_cart.games = game
-    await db.commit()
-    await db.refresh(db_cart)
+async def add_to_cart(db: AsyncSession, cart: schemas.CartCreate, db_cart: models.Cart):
+    if cart.game_ids:
+        result = await db.execute(select(models.Game).filter(models.Game.id.in_(cart.game_ids)))
+        games = result.scalars().all()
+        db_cart.games = games
+        await db.commit()
+        await db.refresh(db_cart)
     return db_cart
+
     # crud для аренды и покупки
 
 
-async def read_carts(db: AsyncSession, cart_id: int):
+async def read_carts(db: AsyncSession, cart_id: int) -> models.Cart:
     db_cart = await db.execute(select(models.Cart).filter(models.Cart.id == cart_id))
-    return db_cart.scalars().all()
+    return db_cart.scalar_one_or_none()
 

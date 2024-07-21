@@ -24,8 +24,20 @@ class Game(GameBase):
         orm_mode = True
 
 
-class User(UserRead):
+class UserBase(BaseModel):
+    name: str
+
+
+class UserCreate(UserBase):
+    pass
+
+
+class User(UserBase):
+    id: int
     carts: List['Cart'] = []
+
+    class Config:
+        orm_mode = True
 
 # схемы корзины
 
@@ -35,13 +47,33 @@ class CartBase(BaseModel):
 
 
 class CartCreate(CartBase):
-    game_ids: List[int]
+    game_ids: Optional[List[int]] = []
 
 
 class Cart(CartBase):
     id: int
     user: User
     games: List[Game] = []
+
+    class Config:
+        orm_mode = True
+
+
+class Payment(BaseModel):
+    id: int
+
+
+class PaymentCreate(Payment):
+    cart_id: int
+    amount: float
+    description: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+class UserPayment(Payment):
+    payment: str
+    state: str
 
     class Config:
         orm_mode = True
