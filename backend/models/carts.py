@@ -1,7 +1,8 @@
 from sqlalchemy import (Column,
                         Integer,
                         ForeignKey,
-                        Table)
+                        Table,
+                        Boolean)
 from .base import Base
 
 
@@ -14,3 +15,4 @@ class CartGames(Base):
 class Cart(Base):
     __tablename__ = 'cart'
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    is_active = Column(Boolean, default=True)

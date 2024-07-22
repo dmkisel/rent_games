@@ -1,6 +1,5 @@
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel
-
 
 
 class GameBase(BaseModel):
@@ -17,7 +16,7 @@ class GameCreate(GameBase):
     pass
 
 
-class Game(GameBase):
+class GameRead(GameBase):
 
     class Config:
         orm_mode = True

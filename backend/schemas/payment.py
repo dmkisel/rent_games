@@ -1,6 +1,5 @@
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel
-from backend.auth.schemas import UserRead
 
 
 class Payment(BaseModel):

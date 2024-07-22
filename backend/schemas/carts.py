@@ -1,5 +1,7 @@
 from typing import Optional, List
 from pydantic import BaseModel
+from .games import GameRead
+from backend.models.games import Game
 
 
 class CartBase(BaseModel):
@@ -7,13 +9,18 @@ class CartBase(BaseModel):
 
 
 class CartCreate(CartBase):
-    game_ids: Optional[List[int]] = []
-
-
-class Cart(CartBase):
     id: int
-    user: User
-    games: List[Game] = []
+    is_active: Optional[bool] = True
 
     class Config:
         orm_mode = True
+
+
+class CartRead(CartBase):
+    id: int
+    games: List[GameRead] = []
+
+    class Config:
+        orm_mode = True
+
+
