@@ -1,11 +1,11 @@
 from fastapi_users.authentication import CookieTransport, AuthenticationBackend
 from fastapi_users.authentication import JWTStrategy
-
+from backend.config import SECRET_AUTH
 
 cookie_transport = CookieTransport(cookie_max_age=3600)
 
-#TODO в глобальную переменную
-SECRET = "SECRET"
+SECRET = SECRET_AUTH
+
 
 def get_jwt_strategy() -> JWTStrategy:
     return JWTStrategy(secret=SECRET, lifetime_seconds=3600)

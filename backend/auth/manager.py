@@ -2,12 +2,13 @@ import uuid
 from typing import Optional
 
 from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, UUIDIDMixin, IntegerIDMixin
+from fastapi_users import BaseUserManager, IntegerIDMixin
 
-from backend.auth.db import User, get_user_db
+from backend.models.users import User, get_user_db
+from backend.config import SECRET_MANEGER
 
-# TODO вынести в глобальную
-SECRET = "SECRET"
+
+SECRET = SECRET_MANEGER
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, uuid.UUID]):

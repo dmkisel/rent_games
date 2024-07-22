@@ -2,15 +2,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from backend.config import (DB_URL,
                             DB_ECHO)
-from datetime import datetime
 from sqlalchemy import (Column,
                         Integer,
                         DateTime,
-                        Float,
-                        Boolean,
-                        Table, func)
-from sqlalchemy.orm import (relationship,
-                            DeclarativeBase)
+                        func)
+from sqlalchemy.orm import (DeclarativeBase)
 
 
 engine = create_async_engine(DB_URL, echo=DB_ECHO)
