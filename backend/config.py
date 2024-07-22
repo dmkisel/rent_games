@@ -1,4 +1,3 @@
-# DB_ENGINE = "psycopg"
 DB_ENGINE = "asyncpg"
 DB_USER = "user"
 DB_PASSWORD = "example"

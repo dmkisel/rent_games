@@ -21,6 +21,7 @@ from backend.auth.manager import get_user_manager
 from backend.auth.schemas import UserRead, UserCreate
 from database import crud, schemas, models
 from database.engine.engine import get_db
+from backend.services.payment.yookassapay import create_pay,get_payment
 
 with open("config.yaml", "r") as stream:
     config = yaml.safe_load(stream)
@@ -100,7 +101,7 @@ async def create_cart(cart: schemas.CartCreate, db: AsyncSession = Depends(get_d
     # )
     return db_cart
 
-@app.get("/carts/{cart_id}", response_model=schemas.Cart, tags=["carts"])
+@app.get("/carts/<cart_id>", response_model=schemas.Cart, tags=["carts"])
 async def read_cart(cart_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     db_cart = await crud.read_carts(db, cart_id)
     if db_cart is None:
@@ -117,10 +118,11 @@ async def read_cart(cart_id: int, db: AsyncSession = Depends(get_db), user: User
 
 
 
-#Аренда, текущие статусы
+#Покупка, текущие статусы
 
-
-
+# @app.post("/carts/<cart_id>/pay/", response_model=schemas.UserPayment, tags=["payment"])
+# async def create_payment(pay: schemas.PaymentCreate, user: User = Depends(current_user), db: AsyncSession = Depends(get_db)):
+#     payment = create_pay(pay)
 
 
 #telegram, email ведомления и подтверждение

@@ -2,7 +2,7 @@ import json
 import yaml
 import telebot
 from telebot import types
-from backend.integrations.telegram import verif
+from backend.services.telegram import verif
 from backend.app import config
 
 token = config["telegram"]["token"]

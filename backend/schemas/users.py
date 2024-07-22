@@ -1,6 +1,7 @@
+from typing import Optional, List
+from pydantic import BaseModel
 import uuid
 from typing import Optional
-
 from fastapi_users import schemas
 
 
@@ -27,3 +28,13 @@ class UserCreate(schemas.BaseUserCreate):
     is_verified: Optional[bool] = False
 
 
+class UserBase(BaseModel):
+    name: str
+
+
+class User(UserBase):
+    id: int
+    carts: List['Cart'] = []
+
+    class Config:
+        orm_mode = True
