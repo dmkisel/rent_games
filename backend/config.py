@@ -9,3 +9,6 @@ DB_URL = f"postgresql+{DB_ENGINE}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/
 url_alembic = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 DB_ECHO = True
+
+SECRET_AUTH = 'hobklm80-mumy'
+SECRET_MANEGER = 'kjvmdv#908u9'
