@@ -8,7 +8,7 @@ from backend.models.base import get_db
 from backend.schemas.users import UserRead, UserCreate
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
-from backend.routers import games,carts
+from backend.routers import games, carts, payment
 
 
 app = FastAPI()
@@ -44,9 +44,13 @@ app.include_router(games.game_router,
 
 app.include_router(carts.cart_router,
                    prefix="/carts",
-                   tags=["carts"]
+                   tags=["carts"],
                    )
 
+app.include_router(payment.payment_router,
+                   prefix="/payment",
+                   tags=["payment"],
+                   )
 
 # Покупка, текущие статусы
 

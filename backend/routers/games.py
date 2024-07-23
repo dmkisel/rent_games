@@ -15,6 +15,14 @@ from backend.schemas.games import (GameCreate,
 from backend.crud.games import (create_game,
                                 get_game,
                                 get_games)
+'''
+1. Просмотр игр
+2. Просмотр карточки игр
+3. Добавление игр (админ)
+4. Редактирование
+5. Удаление игр
+
+'''
 
 game_router = APIRouter()
 
