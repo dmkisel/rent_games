@@ -1,8 +1,8 @@
 from typing import List
 
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import status, Response
+from fastapi import status, Response, HTTPException
 from backend.schemas.carts import CartCreate
 from backend.models.carts import Cart, CartGames
 from backend.models.games import Game
@@ -12,7 +12,7 @@ from backend.crud.games import get_game
 
 
 async def create_carts(db: AsyncSession, user_id) -> Cart:
-    db_cart = Cart(user_id=user_id)
+    db_cart = Cart(user_id=user_id, is_active=True)
     db.add(db_cart)
     await db.commit()
     await db.refresh(db_cart)
@@ -20,7 +20,7 @@ async def create_carts(db: AsyncSession, user_id) -> Cart:
 
 
 async def get_cart(db: AsyncSession, user_id: int) -> Cart | None:
-    db_cart = await db.execute(select(Cart).filter(Cart.user_id == user_id and Cart.is_active == True))
+    db_cart = await db.execute(select(Cart).filter(and_(Cart.user_id == user_id, Cart.is_active == True)))
     result = db_cart.scalars().first()
     if result is None:
         result = await create_carts(db, user_id)
@@ -45,7 +45,10 @@ async def add_items(db: AsyncSession, user_id: int, game_id: int) -> List[Game]:
 
 async def del_games_cart(db: AsyncSession, user_id: int, game_id: int) -> List[Game]:
     db_cart = await get_cart(db, user_id)
-    game = await db.execute(select(CartGames).filter(CartGames.cart_id == db_cart.id and CartGames.game_id == game_id))
+    db_game = await db.execute(select(CartGames).filter(and_(CartGames.cart_id == db_cart.id, CartGames.game_id == game_id)))
+    game = db_game.scalars().first()
+    if game is None:
+        raise HTTPException(status_code=404, detail="Game not found")
     await db.delete(game)
     await db.commit()
     db_item = await get_cart_items(db, user_id)
