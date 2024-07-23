@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import status, Response
 from backend.schemas.carts import CartCreate
-from backend.models.carts import Cart,CartGames
+from backend.models.carts import Cart, CartGames
 from backend.models.games import Game
 from backend.crud.games import get_game
 
@@ -27,19 +27,28 @@ async def get_cart(db: AsyncSession, user_id: int) -> Cart | None:
     return result
 
 
-async def get_cart_items(db: AsyncSession, user_id: int):
+async def get_cart_items(db: AsyncSession, user_id: int) -> List[Game]:
     db_cart = await get_cart(db, user_id)
-    db_games = await db.execute(select(CartGames).join(Game).filter(CartGames.cart_id == db_cart.id))
+    db_games = await db.execute(select(Game).join(CartGames).filter(CartGames.cart_id == db_cart.id))
     result = db_games.scalars().all()
-    return result
+    return list(result)
 
 
-async def add_item(db: AsyncSession, user_id: int, game_id: int):
+async def add_items(db: AsyncSession, user_id: int, game_id: int) -> List[Game]:
     db_cart = await get_cart(db, user_id)
     db_game = CartGames(cart_id=db_cart.id, game_id=game_id)
     db.add(db_game)
     await db.commit()
-    db_item = get_cart_items(db, user_id)
+    db_item = await get_cart_items(db, user_id)
+    return db_item
+
+
+async def del_games_cart(db: AsyncSession, user_id: int, game_id: int) -> List[Game]:
+    db_cart = await get_cart(db, user_id)
+    game = await db.execute(select(CartGames).filter(CartGames.cart_id == db_cart.id and CartGames.game_id == game_id))
+    await db.delete(game)
+    await db.commit()
+    db_item = await get_cart_items(db, user_id)
     return db_item
 
 

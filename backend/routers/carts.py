@@ -10,8 +10,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.models.users import User
 from backend.models.base import get_db
 
-from backend.schemas.carts import CartRead, CartCreate
-from backend.crud.carts import get_cart,get_cart_items
+from backend.schemas.carts import (CartRead,
+                                   CartCreate)
+from backend.schemas.games import GameBase
+from backend.crud.carts import (get_cart,
+                                add_items,
+                                del_games_cart)
 
 cart_router = APIRouter()
 
@@ -24,13 +28,20 @@ current_user = fastapi_users.current_user()
 current_superuser = fastapi_users.current_user(superuser=True)
 
 
-@cart_router.get("/<user_id>/", response_model=CartCreate)
+@cart_router.get("/", response_model=List[GameBase])
 async def get_item_from_cart(user_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     # user_id = user.id
     cart = await get_cart(db, user_id)
     return cart
 
 
-@cart_router.post("/<game_id>/", response_model=CartCreate)
-async def add_to_cart(cart_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
-    cart = await get_cart_items(db, cart_id)
+@cart_router.post("/<game_id>/", response_model=List[GameBase])
+async def add_to_carts(game_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+    cart = await add_items(db, user.id, game_id)
+    return cart
+
+
+@cart_router.delete("/<game_id>/", response_model=List[GameBase])
+async def del_from_cart(game_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+    cart = await del_games_cart(db, user.id, game_id)
+    return cart
