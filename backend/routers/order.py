@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -7,18 +8,18 @@ from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from backend.crud.carts import get_cart_items, get_cart
+from backend.crud.payment import create_order, get_order_user
 from backend.models.users import User
 from backend.models.base import get_db
-from backend.schemas.games import (GameCreate,
-                                   GameBase,
-                                   GameRead)
+from backend.schemas.orders import (OrderRead,
+                                    OrderCreate,
+                                    )
 from backend.crud.games import (create_game,
                                 get_game,
                                 get_games)
 
-
 order_router = APIRouter()
-
 
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
@@ -36,7 +37,24 @@ current_superuser = fastapi_users.current_user(superuser=True)
 #получить историю заказов
 
 
+@order_router.post("/create/", response_model=OrderRead)
+async def create_orders(user: User = Depends(current_user),
+                          db: AsyncSession = Depends(get_db),
+                          user_text: str = ''):
+    order = create_order(db, user.id, user_text)
+    return order
 
-# @payment_router.post("/create/", response_model=GameCreate)
-# async def create_payment(user: User = Depends(current_superuser), db: AsyncSession = Depends(get_db)):
-#
+
+@order_router.get("/", response_model=List[OrderRead])
+async def get_orders(user: User = Depends(current_user),
+                     db: AsyncSession = Depends(get_db)):
+    orders = await get_order_user(db, user.id)
+    return orders
+
+
+@order_router.post("/conf/<order_id>/", response_model=OrderRead)
+async def confirmed_order(order_id: str,
+                          user: User = Depends(current_user),
+                          db: AsyncSession = Depends(get_db),
+                          ):
+    return pass

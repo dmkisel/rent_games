@@ -7,6 +7,8 @@ from sqlalchemy import (Column,
 from sqlalchemy.dialects.postgresql import JSONB
 from .base import Base
 
+#сделать через ENUM
+#create -> confirmed -> paid -> delivery -> done
 
 class Order(Base):
     __tablename__ = 'order'
