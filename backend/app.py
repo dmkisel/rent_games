@@ -8,7 +8,7 @@ from backend.models.base import get_db
 from backend.schemas.users import UserRead, UserCreate
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
-from backend.routers import games, carts, payment
+from backend.routers import games, carts, order
 
 
 app = FastAPI()
@@ -31,6 +31,8 @@ app.include_router(
     prefix="/auth",
     tags=["auth"],
 )
+
+
 
 current_user = fastapi_users.current_user()
 current_superuser = fastapi_users.current_user(superuser=True)

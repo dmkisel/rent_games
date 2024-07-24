@@ -18,22 +18,11 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     email = Column(String, unique=True, nullable=False)
     telegram = Column(String, unique=True, nullable=True)
     chat_telegram = Column(String, unique=True, nullable=True)
+    address = Column(String, unique=True, nullable=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True, nullable=False)
     is_superuser = Column(Boolean, default=False, nullable=False)
     is_verified = Column(Boolean, default=False, nullable=False)
-
-
-# class User(Base):
-#     __tablename__ = 'user'
-#     username = Column(String, unique=True)
-#     email = Column(String, unique=True)
-#     telegram = Column(String, unique=True)
-#     chat_telegram = Column(String, unique=True)
-#     hashed_password = Column(String)
-#     is_active = Column(Boolean, default=True, nullable=False)
-#     is_superuser = Column(Boolean, default=False, nullable=False)
-#     is_verified = Column(Boolean, default=False, nullable=False)
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

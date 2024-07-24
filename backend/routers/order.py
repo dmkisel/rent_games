@@ -17,7 +17,7 @@ from backend.crud.games import (create_game,
                                 get_games)
 
 
-payment_router = APIRouter()
+order_router = APIRouter()
 
 
 fastapi_users = FastAPIUsers[User, int](
@@ -25,8 +25,16 @@ fastapi_users = FastAPIUsers[User, int](
     [auth_backend],
 )
 
-current_user = fastapi_users.current_user()
+current_user = fastapi_users.current_user(verified=True)
 current_superuser = fastapi_users.current_user(superuser=True)
+
+
+#создать заказ
+#подтвердить заказ
+#оплатить заказ
+#отменить заказ
+#получить историю заказов
+
 
 
 # @payment_router.post("/create/", response_model=GameCreate)
