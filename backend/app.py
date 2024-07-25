@@ -49,7 +49,7 @@ app.include_router(carts.cart_router,
                    tags=["carts"],
                    )
 
-app.include_router(payment.payment_router,
+app.include_router(order.order_router,
                    prefix="/payment",
                    tags=["payment"],
                    )

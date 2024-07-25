@@ -9,7 +9,7 @@ from backend.auth.manager import get_user_manager
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.crud.carts import get_cart_items, get_cart
-from backend.crud.payment import create_order, get_order_user
+from backend.crud.payment import create_order, get_order_user, confirmed_orders
 from backend.models.users import User
 from backend.models.base import get_db
 from backend.schemas.orders import (OrderRead,
@@ -30,17 +30,16 @@ current_user = fastapi_users.current_user(verified=True)
 current_superuser = fastapi_users.current_user(superuser=True)
 
 
-#создать заказ
-#подтвердить заказ
-#оплатить заказ
-#отменить заказ
-#получить историю заказов
+# подтвердить заказ
+# оплатить заказ
+# отменить заказ
+# получить историю заказов
 
 
 @order_router.post("/create/", response_model=OrderRead)
 async def create_orders(user: User = Depends(current_user),
-                          db: AsyncSession = Depends(get_db),
-                          user_text: str = ''):
+                        db: AsyncSession = Depends(get_db),
+                        user_text: str = ''):
     order = create_order(db, user.id, user_text)
     return order
 
@@ -52,9 +51,19 @@ async def get_orders(user: User = Depends(current_user),
     return orders
 
 
-@order_router.post("/conf/<order_id>/", response_model=OrderRead)
-async def confirmed_order(order_id: str,
+@order_router.post("/confirmed/<order_id>/", response_model=OrderRead)
+async def confirmed_order(order_id: int,
                           user: User = Depends(current_user),
                           db: AsyncSession = Depends(get_db),
                           ):
-    return pass
+    order = confirmed_orders(db, order_id)
+    return order
+
+
+@order_router.get("/pay/<order_id>/", response_model=OrderRead)
+async def confirmed_order(order_id: int,
+                          user: User = Depends(current_user),
+                          db: AsyncSession = Depends(get_db),
+                          ):
+    order = confirmed_orders(db, order_id)
+    return order

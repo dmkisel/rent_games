@@ -29,4 +29,5 @@ class Payment(Base):
     descriptions = Column(String, nullable=False)
     state = Column(String, nullable=False, default='create')
     confirmation = Column(JSONB, nullable=False)
+    confirmation_url = Column(String, nullable=True)
 
