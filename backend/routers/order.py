@@ -27,7 +27,7 @@ fastapi_users = FastAPIUsers[User, int](
     [auth_backend],
 )
 
-current_user = fastapi_users.current_user(verified=True)
+current_user = fastapi_users.current_user()
 current_superuser = fastapi_users.current_user(superuser=True)
 
 

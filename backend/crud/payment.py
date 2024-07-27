@@ -27,14 +27,16 @@ async def create_order(db: AsyncSession,
     db_cart = await get_cart_items(db, user_id)
     cart = await get_cart(db, user_id)
     amount = float()
+    contain = dict()
     for cart_item in db_cart:
         amount += cart_item.price
+        contain[cart_item.id] = cart_item.price
     db_order = Order(user_id=user_id,
                      cart_id=cart.id,
                      amount=amount,
-                     contain=json.dumps(db_cart),
+                     contain=contain,
                      descriptions=user_text,
-                     type_orders=1
+                     type_orders=1,
                      )
     db.add(db_order)
     await db.commit()
