@@ -41,7 +41,7 @@ current_superuser = fastapi_users.current_user(superuser=True)
 async def create_orders(user: User = Depends(current_user),
                         db: AsyncSession = Depends(get_db),
                         user_text: str = ''):
-    order = create_order(db, user.id, user_text)
+    order = await create_order(db, user.id, user_text)
     return order
 
 

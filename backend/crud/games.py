@@ -44,6 +44,7 @@ async def update_game(db: AsyncSession, up_game: GameCreate) -> Game:
     db_game.price_type = up_game.price_type
     db_game.quantity = up_game.quantity
     db_game.is_active = up_game.is_active
+    db_game.image_url = up_game.image_url
     await db.commit()
     await db.refresh(db_game)
     return db_game
