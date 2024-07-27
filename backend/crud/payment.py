@@ -7,10 +7,10 @@ from fastapi import status, Response
 
 from backend.crud.carts import get_cart_items, get_cart
 from backend.models import Cart
-from backend.models.payment import Order
+from backend.models.payment import Order, Payment
 from backend.schemas.carts import CartCreate
 from backend.schemas.orders import OrderCreate
-from backend.services.payment.yookassapay import create_pay, get_payment
+from backend.services.payment.yookassapay import create_pay, get_payment, update_payment
 
 
 # создать заказ
@@ -66,5 +66,21 @@ async def confirmed_orders(db: AsyncSession, order_id: int) -> Order:
     return db_order
 
 
-async def create_payments(db: AsyncSession, user_id: int):
-    pass
+async def create_payments(db: AsyncSession, order_id: int) -> Payment | None:
+    order = await db.execute(select(Order).filter(Order.id == order_id))
+    db_order = order.scalars().first()
+    payment = await get_payment(db_order)
+    db.add(payment)
+    await db.commit()
+    await db.refresh(db_order)
+    return payment
+
+
+async def check_payment(db: AsyncSession, order_id: int) -> Payment | None:
+    payment = await db.execute(select(Payment).join(Order).filter(Order.id == order_id))
+    db_pay = payment.scalars().first()
+    payment = await update_payment(db_pay.payment_id)
+    db_pay.state = payment.state
+    await db.commit()
+    await db.refresh(db_pay)
+    return payment

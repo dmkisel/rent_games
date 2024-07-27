@@ -9,6 +9,7 @@ class GameBase(BaseModel):
     price: float
     price_type: int
     is_active: Optional[bool] = True
+    image_url: Optional[str]
 
 
 class GameCreate(GameBase):

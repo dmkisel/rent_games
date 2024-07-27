@@ -9,7 +9,7 @@ from backend.auth.manager import get_user_manager
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.crud.carts import get_cart_items, get_cart
-from backend.crud.payment import create_order, get_order_user, confirmed_orders
+from backend.crud.payment import create_order, get_order_user, confirmed_orders, create_payments, check_payment
 from backend.models.users import User
 from backend.models.base import get_db
 from backend.schemas.orders import (OrderRead,
@@ -18,6 +18,7 @@ from backend.schemas.orders import (OrderRead,
 from backend.crud.games import (create_game,
                                 get_game,
                                 get_games)
+from backend.schemas.payment import UserPayment
 
 order_router = APIRouter()
 
@@ -56,14 +57,23 @@ async def confirmed_order(order_id: int,
                           user: User = Depends(current_user),
                           db: AsyncSession = Depends(get_db),
                           ):
-    order = confirmed_orders(db, order_id)
+    order = await confirmed_orders(db, order_id)
     return order
 
 
-@order_router.get("/pay/<order_id>/", response_model=OrderRead)
-async def confirmed_order(order_id: int,
-                          user: User = Depends(current_user),
-                          db: AsyncSession = Depends(get_db),
-                          ):
-    order = confirmed_orders(db, order_id)
+@order_router.get("/pay/<order_id>/", response_model=UserPayment)
+async def payment_order(order_id: int,
+                        user: User = Depends(current_user),
+                        db: AsyncSession = Depends(get_db),
+                        ):
+    order = await create_payments(db, order_id)
+    return order
+
+
+@order_router.get("/state/<order_id>/", response_model=UserPayment)
+async def payment_check(order_id: int,
+                        user: User = Depends(current_user),
+                        db: AsyncSession = Depends(get_db),
+                        ):
+    order = await check_payment(db, order_id)
     return order

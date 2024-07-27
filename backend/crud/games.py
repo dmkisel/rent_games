@@ -13,7 +13,8 @@ async def create_game(db: AsyncSession, game: GameCreate) -> Game:
                    price=game.price,
                    price_type=game.price_type,
                    quantity=game.quantity,
-                   is_active=game.is_active,)
+                   is_active=game.is_active,
+                   image_url=game.image_url)
     db.add(db_game)
     await db.commit()
     await db.refresh(db_game)

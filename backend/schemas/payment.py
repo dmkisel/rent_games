@@ -4,12 +4,13 @@ from pydantic import BaseModel
 
 class Payment(BaseModel):
     id: int
-
+    order_id: int
+    confirmation_url: str
+    description: Optional[str] = None
+    amount: float
 
 class PaymentCreate(Payment):
-    cart_id: int
-    amount: float
-    description: Optional[str] = None
+    confirmation: dict
 
     class Config:
         orm_mode = True

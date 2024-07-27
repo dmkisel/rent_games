@@ -24,10 +24,9 @@ class Order(Base):
 class Payment(Base):
     __tablename__ = 'payment'
     order_id = Column(Integer, ForeignKey('order.id'), nullable=False)
-    payment_id = Column(String, nullable=False)
     amount = Column(Float, nullable=False)
-    descriptions = Column(String, nullable=False)
     state = Column(String, nullable=False, default='create')
     confirmation = Column(JSONB, nullable=False)
     confirmation_url = Column(String, nullable=True)
+    payment_id = Column(String, nullable=True)
 

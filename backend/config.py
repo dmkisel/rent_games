@@ -16,3 +16,5 @@ SECRET_MANEGER = 'kjvmdv#908u9'
 
 token = 'test_WZz6F4B1juxUDdElPNgj3IundBnmFFoqa0i1aaqllng'
 account = '424098'
+
+site_url = 'http://localhost:8000'

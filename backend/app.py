@@ -50,8 +50,8 @@ app.include_router(carts.cart_router,
                    )
 
 app.include_router(order.order_router,
-                   prefix="/payment",
-                   tags=["payment"],
+                   prefix="/order",
+                   tags=["order"],
                    )
 
 # Покупка, текущие статусы

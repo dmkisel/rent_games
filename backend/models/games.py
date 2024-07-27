@@ -22,6 +22,7 @@ class Game(Base):
     price_type = Column(Integer, ForeignKey("type_price.id"))
     quantity = Column(Integer, default=0)
     is_active = Column(Boolean, default=False)
+    image_url = Column(String, nullable=True)
 
     def deactivate_at_zero(self):
         if self.quantity == 0 or self.price == 0:
