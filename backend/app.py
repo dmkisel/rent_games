@@ -9,11 +9,12 @@ from backend.schemas.users import UserRead, UserCreate, UserUpdate
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
 from backend.routers import games, carts, order
-
+from
 
 app = FastAPI()
 
-# авторизация
+
+
 
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
@@ -38,12 +39,9 @@ app.include_router(
     tags=["users"],
 )
 
-
-
 current_user = fastapi_users.current_user()
 current_superuser = fastapi_users.current_user(superuser=True)
 
-# игры
 
 app.include_router(games.game_router,
                    prefix="/games",
@@ -59,16 +57,6 @@ app.include_router(order.order_router,
                    prefix="/order",
                    tags=["order"],
                    )
-
-# Покупка, текущие статусы
-
-# @app.post("/carts/<cart_id>/pay/", response_model=schemas.UserPayment, tags=["payment"])
-# async def create_payment(pay: schemas.PaymentCreate, user: User = Depends(current_user), db: AsyncSession = Depends(get_db)):
-#     payment = create_pay(pay)
-
-
-# telegram, email ведомления и подтверждение
-
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

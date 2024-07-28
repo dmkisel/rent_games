@@ -3,6 +3,14 @@ import requests
 
 API_URL = 'http://localhost:8000'
 
+def post_info(token, game_id):
+    url = f'{API_URL}/carts/{game_id}/'
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+    response = requests.post(url, headers=headers)
+    return response
+
 st.set_page_config(page_title="All Games", page_icon="🕹")
 
 st.header("Доступные игры")
@@ -31,7 +39,7 @@ for game in game_list:
                 st.switch_page("detail_game.py")
         with buy:
             if buy.button(label="Buy", key=f"game_by_{game['id']}"):
-                response = requests.post(f"{API_URL}/carts/{game['id']}")
-                if response.status_code == 200:
+                action = post_info(st.session_state.token, game['id'])
+                if action.status_code == 200:
                     st.success('Game add to you cart', icon="✅")
 
