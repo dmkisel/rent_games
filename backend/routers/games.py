@@ -52,13 +52,13 @@ async def get_all_games(skip: int = 0, limit: int = 10, db: AsyncSession = Depen
     return db_games
 
 
-@game_router.get("/<game_id>/", response_model=GameRead)
+@game_router.get("/{game_id}/", response_model=GameRead)
 async def get_game_by_id(game_id: int, db: AsyncSession = Depends(get_db)):
     db_games = await get_game(db, game_id)
     return db_games
 
 
-@game_router.put("/<game_id>/", response_model=GameRead)
+@game_router.put("/{game_id}/", response_model=GameRead)
 async def update_games(game_id: int, up_game: GameCreate, user: User = Depends(current_superuser), db: AsyncSession = Depends(get_db)):
     db_game = await update_game(db, up_game)
     return db_game

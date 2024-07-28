@@ -2,7 +2,7 @@ from fastapi_users.authentication import CookieTransport, AuthenticationBackend
 from fastapi_users.authentication import JWTStrategy
 from backend.config import SECRET_AUTH
 
-cookie_transport = CookieTransport(cookie_max_age=3600)
+cookie_transport = CookieTransport(cookie_max_age=3600, cookie_name='token')
 
 SECRET = SECRET_AUTH
 

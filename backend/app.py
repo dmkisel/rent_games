@@ -5,7 +5,7 @@ from fastapi_users import fastapi_users, FastAPIUsers
 
 from backend.models.users import User
 from backend.models.base import get_db
-from backend.schemas.users import UserRead, UserCreate
+from backend.schemas.users import UserRead, UserCreate, UserUpdate
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
 from backend.routers import games, carts, order
@@ -30,6 +30,12 @@ app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
     prefix="/auth",
     tags=["auth"],
+)
+
+app.include_router(
+    fastapi_users.get_users_router(UserRead, UserUpdate),
+    prefix="/users",
+    tags=["users"],
 )
 
 

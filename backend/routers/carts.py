@@ -42,13 +42,13 @@ async def get_all_from_cart(db: AsyncSession = Depends(get_db), user: User = Dep
     return cart
 
 
-@cart_router.post("/<game_id>/", response_model=List[GameBase])
+@cart_router.post("/{game_id}/", response_model=List[GameBase])
 async def add_to_carts(game_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     cart = await add_items(db, user.id, game_id)
     return cart
 
 
-@cart_router.delete("/<game_id>/", response_model=List[GameBase])
+@cart_router.delete("/{game_id}/", response_model=List[GameBase])
 async def delete_from_cart(game_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     cart = await del_games_cart(db, user.id, game_id)
     return cart

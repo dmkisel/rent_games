@@ -22,7 +22,7 @@ async def create_game(db: AsyncSession, game: GameCreate) -> Game:
 
 
 async def get_games(db: AsyncSession, skip: int = 0, limit: int = 10):
-    result = await db.execute(select(Game).offset(skip).limit(limit))
+    result = await db.execute(select(Game).order_by(Game.id).offset(skip).limit(limit))
     return result.scalars().all()
 
 

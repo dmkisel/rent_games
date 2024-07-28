@@ -52,7 +52,7 @@ async def get_orders(user: User = Depends(current_user),
     return orders
 
 
-@order_router.post("/confirmed/<order_id>/", response_model=OrderRead)
+@order_router.post("/confirmed/{order_id}/", response_model=OrderRead)
 async def confirmed_order(order_id: int,
                           user: User = Depends(current_user),
                           db: AsyncSession = Depends(get_db),
@@ -61,7 +61,7 @@ async def confirmed_order(order_id: int,
     return order
 
 
-@order_router.get("/pay/<order_id>/", response_model=UserPayment)
+@order_router.get("/pay/{order_id}/", response_model=UserPayment)
 async def payment_order(order_id: int,
                         user: User = Depends(current_user),
                         db: AsyncSession = Depends(get_db),
@@ -70,7 +70,7 @@ async def payment_order(order_id: int,
     return order
 
 
-@order_router.get("/state/<order_id>/", response_model=UserPayment)
+@order_router.get("/state/{order_id}/", response_model=UserPayment)
 async def payment_check(order_id: int,
                         user: User = Depends(current_user),
                         db: AsyncSession = Depends(get_db),
