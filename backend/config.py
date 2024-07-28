@@ -13,8 +13,12 @@ DB_ECHO = False
 SECRET_AUTH = 'hobklm80-mumy'
 SECRET_MANEGER = 'kjvmdv#908u9'
 
+telebot_token = '6741253650:AAHGwi8GrcMCWEokppQ0AIvsizEu5sey-Nk'
+
 
 token = 'test_WZz6F4B1juxUDdElPNgj3IundBnmFFoqa0i1aaqllng'
 account = '424098'
 
 site_url = 'http://localhost:8000'
+
+rent_game = 'jdguszbtafgrfswx'

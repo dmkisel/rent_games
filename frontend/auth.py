@@ -43,7 +43,7 @@ if not User.token:
 
     with reg:
         if st.button("Регистрация"):
-            st.switch_page("register.py")
+            st.switch_page("register")
 
 
 elif st.button("Выйти"):
