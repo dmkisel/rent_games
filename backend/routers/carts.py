@@ -6,7 +6,7 @@ from fastapi_users import fastapi_users, FastAPIUsers
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from backend.auth.auth import fastapi_users, current_user, current_superuser
 from backend.models.users import User
 from backend.models.base import get_db
 
@@ -25,14 +25,6 @@ from backend.crud.carts import (get_cart_items,
 '''
 
 cart_router = APIRouter()
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
-
-current_user = fastapi_users.current_user()
-current_superuser = fastapi_users.current_user(superuser=True)
 
 
 @cart_router.get("/", response_model=List[GameBase])

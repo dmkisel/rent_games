@@ -1,3 +1,5 @@
+import dataclasses
+
 import streamlit as st
 import requests
 
@@ -11,12 +13,13 @@ order = st.Page("order.py", title="Order", icon="💸")
 history = st.Page("history.py", title="History", icon="📖")
 cart = st.Page("cart.py", title="Cart", icon="🛒")
 
-if 'token' in st.session_state:
-        page = {"Accounts": [auth, cart, order, history,register],
-                "Games": [all_games, detail]}
+
+if User.token:
+    page = {"Accounts": [auth, cart, order, history, register],
+            "Games": [all_games, detail]}
 else:
-        page = {"Accounts": [auth, register],
-                "Games": [all_games, detail]}
+    page = {"Accounts": [auth, register],
+            "Games": [all_games, detail]}
 
 pg = st.navigation(page)
 

@@ -1,7 +1,7 @@
 import uvicorn
 
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi_users import fastapi_users, FastAPIUsers
+from fastapi_users import FastAPIUsers
 
 from backend.models.users import User
 from backend.models.base import get_db
@@ -9,17 +9,10 @@ from backend.schemas.users import UserRead, UserCreate, UserUpdate
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
 from backend.routers import games, carts, order
-from
+from backend.auth.auth import fastapi_users, current_user, current_superuser
 
 app = FastAPI()
 
-
-
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -38,9 +31,6 @@ app.include_router(
     prefix="/users",
     tags=["users"],
 )
-
-current_user = fastapi_users.current_user()
-current_superuser = fastapi_users.current_user(superuser=True)
 
 
 app.include_router(games.game_router,

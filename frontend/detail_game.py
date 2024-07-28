@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 
+from app import User
+
 API_URL = 'http://localhost:8000'
 
 game_id = st.session_state["game_id"]
@@ -41,7 +43,7 @@ if game['price_type'] == 2:
 
 if st.button(label="Buy", key=f"game_by_{game['id']}"):
     if 'token' in st.session_state:
-        game = post_info(st.session_state.token)
+        game = post_info(User.token)
     else:
         st.warning("You not authorized")
     if game.status_code == 200:

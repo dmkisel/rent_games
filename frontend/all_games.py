@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 
+from app import User
+
 API_URL = 'http://localhost:8000'
 
 def post_info(token, game_id):
@@ -14,7 +16,7 @@ def post_info(token, game_id):
 st.set_page_config(page_title="All Games", page_icon="🕹")
 
 st.header("Доступные игры")
-
+st.write(User.token)
 response = requests.get(f"{API_URL}/games/")
 
 game_list = response.json()
@@ -39,7 +41,7 @@ for game in game_list:
                 st.switch_page("detail_game.py")
         with buy:
             if buy.button(label="Buy", key=f"game_by_{game['id']}"):
-                action = post_info(st.session_state.token, game['id'])
+                action = post_info(User.token, game['id'])
                 if action.status_code == 200:
                     st.success('Game add to you cart', icon="✅")
 

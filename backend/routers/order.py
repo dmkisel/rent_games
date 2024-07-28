@@ -7,7 +7,7 @@ from fastapi_users import fastapi_users, FastAPIUsers
 from backend.auth.auth import auth_backend
 from backend.auth.manager import get_user_manager
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from backend.auth.auth import fastapi_users, current_user, current_superuser
 from backend.crud.carts import get_cart_items, get_cart
 from backend.crud.payment import create_order, get_order_user, confirmed_orders, create_payments, check_payment
 from backend.models.users import User
@@ -21,14 +21,6 @@ from backend.crud.games import (create_game,
 from backend.schemas.payment import UserPayment
 
 order_router = APIRouter()
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
-
-current_user = fastapi_users.current_user()
-current_superuser = fastapi_users.current_user(superuser=True)
 
 
 # подтвердить заказ
