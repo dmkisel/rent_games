@@ -19,6 +19,8 @@ from backend.crud.games import (create_game,
                                 get_game,
                                 get_games)
 from backend.schemas.payment import UserPayment
+from backend.services.smtp.schemas import EmailSchema
+from backend.services.smtp.send_email import send_email
 
 order_router = APIRouter()
 
@@ -50,6 +52,11 @@ async def confirmed_order(order_id: int,
                           db: AsyncSession = Depends(get_db),
                           ):
     order = await confirmed_orders(db, order_id)
+    #todo: сделать макет (jinja2)
+    # email = EmailSchema(email=user.email,
+    #                     subject=f'Сформирован заказ №{order.id}',
+    #                     body=f'Сформирован заказ на сумму {order.amount}')
+    # await send_email(email)
     return order
 
 

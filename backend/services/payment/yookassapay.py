@@ -3,13 +3,13 @@ from backend.config import token, account, site_url
 import uuid
 from yookassa import Configuration, Payment
 from backend.models.payment import Payment as Pay
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
 Configuration.account_id = account
 Configuration.secret_key = token
 
 
-async def create_pay(order):
-    redirect_url = site_url + f"/order/"
-    idempotence_key = str(uuid.uuid4())
+def create_pay(order, redirect_url, idempotence_key, formatted_date):
     payment = Payment.create({
         "amount": {
             "value": order.amount,
@@ -22,13 +22,24 @@ async def create_pay(order):
             "type": "redirect",
             "return_url": redirect_url
         },
-        "description": f"ОПЛАТА ЗАКАЗА №{order.id} ОТ {datetime.datetime.strptime(order.date_created,"%d.%m.%Y")}"
+        "description": f"ОПЛАТА ЗАКАЗА №{order.id} ОТ {formatted_date}"
     }, idempotence_key)
     return payment
 
 
 async def get_payment(order) -> Pay:
-    payment = await create_pay(order)
+
+    formatted_date = order.date_created.strftime("%d.%m.%Y")
+    loop = asyncio.get_running_loop()
+    with ThreadPoolExecutor() as pool:
+        payment = await loop.run_in_executor(
+            pool,
+            create_pay,
+            order,
+            redirect_url,
+            idempotence_key,
+            formatted_date
+        )
     confirmation_url = payment.confirmation.confirmation_url
     db_pay = Pay(order_id=order.id,
                  amount=order.amount,

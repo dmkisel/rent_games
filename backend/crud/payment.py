@@ -11,8 +11,8 @@ from backend.models.payment import Order, Payment
 from backend.schemas.carts import CartCreate
 from backend.schemas.orders import OrderCreate
 from backend.services.payment.yookassapay import create_pay, get_payment, update_payment
-
-
+from backend.config import token, account, site_url
+import uuid
 # создать заказ
 # подтвердить заказ
 # оплатить заказ
@@ -71,11 +71,17 @@ async def confirmed_orders(db: AsyncSession, order_id: int) -> Order:
 async def create_payments(db: AsyncSession, order_id: int) -> Payment | None:
     order = await db.execute(select(Order).filter(Order.id == order_id))
     db_order = order.scalars().first()
-    payment = await get_payment(db_order)
-    db.add(payment)
-    await db.commit()
-    await db.refresh(db_order)
-    return payment
+    formatted_date = db_order.date_created.strftime("%d.%m.%Y")
+    redirect_url = site_url + f"/order/"
+    idempotence_key = str(uuid.uuid4())
+
+    if db_order:
+        payment = await get_payment(db_order)
+        db.add(payment)
+        await db.commit()
+        await db.refresh(db_order)
+        return payment
+    return None
 
 
 async def check_payment(db: AsyncSession, order_id: int) -> Payment | None:

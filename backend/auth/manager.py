@@ -8,7 +8,8 @@ from starlette.responses import Response
 from backend.models.users import User, get_user_db
 from backend.config import SECRET_MANEGER
 from backend.schemas.users import UserRead
-from backend.services.smtp.sender import send_email_register
+from backend.services.smtp.schemas import EmailSchema
+from backend.services.smtp.send_email import send_email
 
 SECRET = SECRET_MANEGER
 
@@ -19,7 +20,11 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, uuid.UUID]):
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
-        await send_email_register(user.email)
+        email = EmailSchema(email=user.email,
+                            subject=f'Спасибо за регистрацию, {user.username}',
+                            body='Вы зарегистрировались на сервисе')
+        await send_email(email)
+        print(f"User {user.id} send email to {user.email}.")
 
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
@@ -30,6 +35,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, uuid.UUID]):
         self, user: User, token: str, request: Optional[Request] = None
     ):
         print(f"Verification requested for user {user.id}. Verification token: {token}")
+
 
     async def on_after_login(self,user: User,request: Optional[Request] = None,response: Optional[Response] = None):
         print(f"Logged in")

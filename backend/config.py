@@ -21,4 +21,5 @@ account = '424098'
 
 site_url = 'http://localhost:8000'
 
+rent_game_user = 'i@dkisel.ru'
 rent_game = 'jdguszbtafgrfswx'
