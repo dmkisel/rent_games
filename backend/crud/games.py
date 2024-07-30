@@ -1,8 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.models import Game, Cart
-
 from backend.models.games import Game
 from backend.schemas.games import GameCreate
 

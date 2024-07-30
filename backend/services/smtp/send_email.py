@@ -1,9 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
-from pydantic import BaseModel, EmailStr
 from aiosmtplib import send
 from email.message import EmailMessage
-import email_validator
-
 from backend.config import rent_game_user,rent_game
 from backend.services.smtp.schemas import EmailSchema
 

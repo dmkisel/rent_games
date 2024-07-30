@@ -1,7 +1,6 @@
 from sqlalchemy import (Column,
                         Integer,
                         ForeignKey,
-                        Table,
                         Boolean)
 from .base import Base
 

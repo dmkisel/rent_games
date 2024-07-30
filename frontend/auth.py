@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-from app import User
 
 API_URL = 'http://localhost:8000'
 

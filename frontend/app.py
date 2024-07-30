@@ -1,7 +1,4 @@
-import dataclasses
-
 import streamlit as st
-import requests
 
 API_URL = 'http://localhost:8000'
 

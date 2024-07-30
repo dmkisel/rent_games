@@ -2,11 +2,10 @@ from typing import List
 
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import status, Response, HTTPException
-from backend.schemas.carts import CartCreate
+from fastapi import HTTPException
 from backend.models.carts import Cart, CartGames
 from backend.models.games import Game
-from backend.crud.games import get_game
+
 
 # crud для корзины
 

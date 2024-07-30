@@ -1,23 +1,12 @@
-import json
 from typing import List
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import status, Response
-
 from backend.crud.carts import get_cart_items, get_cart
 from backend.models import Cart
 from backend.models.payment import Order, Payment
-from backend.schemas.carts import CartCreate
-from backend.schemas.orders import OrderCreate
-from backend.services.payment.yookassapay import create_pay, get_payment, update_payment
-from backend.config import token, account, site_url
+from backend.services.payment.yookassapay import get_payment, update_payment
+from backend.config import site_url
 import uuid
-# создать заказ
-# подтвердить заказ
-# оплатить заказ
-# отменить заказ
-# получить историю заказов
 
 
 async def create_order(db: AsyncSession,

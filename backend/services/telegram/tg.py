@@ -1,5 +1,4 @@
 import json
-import yaml
 import telebot
 from telebot import types
 from backend.services.telegram import verif

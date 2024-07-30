@@ -8,14 +8,6 @@ API_URL = 'http://localhost:8000'
 game_id = st.session_state["game_id"]
 
 
-# def get_info(token):
-#     url = f'{API_URL}/games/{game_id}'
-#     headers = {
-#         'Authorization': f'Bearer {token}'
-#     }
-#     response = requests.get(url, headers=headers)
-#     return response.json()
-
 def post_info(token):
     url = f'{API_URL}/carts/{game_id}/'
     headers = {

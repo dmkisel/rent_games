@@ -1,7 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
 from .games import GameRead
-from backend.models.games import Game
 
 
 class CartBase(BaseModel):

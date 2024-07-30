@@ -1,17 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import RedirectResponse
-from fastapi_users import fastapi_users, FastAPIUsers
-from backend.auth.auth import auth_backend
-from backend.auth.manager import get_user_manager
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.auth.auth import fastapi_users, current_user, current_superuser
+from backend.auth.auth import current_user
 from backend.models.users import User
 from backend.models.base import get_db
-
-from backend.schemas.carts import (CartRead,
-                                   CartCreate)
 from backend.schemas.games import GameBase
 from backend.crud.carts import (get_cart_items,
                                 add_items,

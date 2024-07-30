@@ -9,6 +9,7 @@ class Payment(BaseModel):
     description: Optional[str] = None
     amount: float
 
+
 class PaymentCreate(Payment):
     confirmation: dict
 

@@ -1,6 +1,4 @@
-from typing import Optional
 from pydantic import BaseModel
-from sqlalchemy.dialects.postgresql import JSONB
 
 
 class Order(BaseModel):

@@ -1,6 +1,4 @@
-import datetime
-from backend.config import token, account, site_url
-import uuid
+from backend.config import token, account
 from yookassa import Configuration, Payment
 from backend.models.payment import Payment as Pay
 from concurrent.futures import ThreadPoolExecutor
