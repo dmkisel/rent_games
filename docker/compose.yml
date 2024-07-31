@@ -13,6 +13,26 @@ services:
     ports:
       - 5432:5432
 
+  backend:
+    build:
+      dockerfile: backend.dockerfile
+      context: ./
+    ports:
+      - "5000:5000"
+    depends_on:
+      pg:
+        condition: service_healthy
+
+  frontend:
+    build:
+      dockerfile: frontend.dockerfile
+      context: ./
+    ports:
+      - "8501:8501"
+    depends_on:
+      pg:
+        condition: service_healthy
+
   rabbitmq:
     image: rabbitmq:3.10.7-management
     hostname: rabbitmq

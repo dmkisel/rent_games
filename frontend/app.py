@@ -11,12 +11,10 @@ history = st.Page("history.py", title="History", icon="📖")
 cart = st.Page("cart.py", title="Cart", icon="🛒")
 
 
-if User.token:
-    page = {"Accounts": [auth, cart, order, history, register],
+
+page = {"Accounts": [auth, cart, order, history, register],
             "Games": [all_games, detail]}
-else:
-    page = {"Accounts": [auth, register],
-            "Games": [all_games, detail]}
+
 
 pg = st.navigation(page)
 
