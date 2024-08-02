@@ -18,8 +18,10 @@ async def create_carts(db: AsyncSession, user_id) -> Cart:
     return db_cart
 
 
-async def get_cart(db: AsyncSession, user_id: int) -> Cart | None:
-    db_cart = await db.execute(select(Cart).filter(and_(Cart.user_id == user_id, Cart.is_active == True)))
+async def get_cart(db: AsyncSession, user_id: int) -> Cart:
+    db_cart = await db.execute(select(Cart).
+                               filter(and_(Cart.user_id == user_id,
+                                           Cart.is_active)))
     result = db_cart.scalars().first()
     if result is None:
         result = await create_carts(db, user_id)
@@ -28,7 +30,9 @@ async def get_cart(db: AsyncSession, user_id: int) -> Cart | None:
 
 async def get_cart_items(db: AsyncSession, user_id: int) -> List[Game]:
     db_cart = await get_cart(db, user_id)
-    db_games = await db.execute(select(Game).join(CartGames).filter(CartGames.cart_id == db_cart.id))
+    db_games = await db.execute(select(Game).
+                                join(CartGames).
+                                filter(CartGames.cart_id == db_cart.id))
     result = db_games.scalars().all()
     return list(result)
 
@@ -44,7 +48,8 @@ async def add_items(db: AsyncSession, user_id: int, game_id: int) -> List[Game]:
 
 async def del_games_cart(db: AsyncSession, user_id: int, game_id: int) -> List[Game]:
     db_cart = await get_cart(db, user_id)
-    db_game = await db.execute(select(CartGames).filter(and_(CartGames.cart_id == db_cart.id, CartGames.game_id == game_id)))
+    db_game = await db.execute(select(CartGames).filter(and_(CartGames.cart_id == db_cart.id,
+                                                             CartGames.game_id == game_id)))
     game = db_game.scalars().first()
     if game is None:
         raise HTTPException(status_code=404, detail="Game not found")

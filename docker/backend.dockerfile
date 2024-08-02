@@ -1,8 +1,12 @@
 FROM ubuntu:latest
-LABEL authors="HUAWEI"
-ENTRYPOINT ["top", "-b"]
-COPY ../ /opt/app
-WORKDIR /opt/app
+
+COPY ../poetry.lock /app
+COPY ../pyproject.toml /app
+COPY ../backend/ /app
+
+WORKDIR app
+
+
 
 
 CMD ["streamlit", "run", "app.py"]

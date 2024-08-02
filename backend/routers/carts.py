@@ -21,19 +21,24 @@ cart_router = APIRouter()
 
 
 @cart_router.get("/", response_model=List[GameBase])
-async def get_all_from_cart(db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+async def get_all_from_cart(db: AsyncSession = Depends(get_db),
+                            user: User = Depends(current_user)):
     # user_id = user.id
     cart = await get_cart_items(db, user.id)
     return cart
 
 
 @cart_router.post("/{game_id}/", response_model=List[GameBase])
-async def add_to_carts(game_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+async def add_to_carts(game_id: int,
+                       db: AsyncSession = Depends(get_db),
+                       user: User = Depends(current_user)):
     cart = await add_items(db, user.id, game_id)
     return cart
 
 
 @cart_router.delete("/{game_id}/", response_model=List[GameBase])
-async def delete_from_cart(game_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
+async def delete_from_cart(game_id: int,
+                           db: AsyncSession = Depends(get_db),
+                           user: User = Depends(current_user)):
     cart = await del_games_cart(db, user.id, game_id)
     return cart

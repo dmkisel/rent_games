@@ -26,7 +26,5 @@ class Payment(Base):
     order_id = Column(Integer, ForeignKey('order.id'), nullable=False)
     amount = Column(Float, nullable=False)
     state = Column(String, nullable=False, default='create')
-    confirmation = Column(JSONB, nullable=False)
     confirmation_url = Column(String, nullable=True)
     payment_id = Column(String, nullable=True)
-
