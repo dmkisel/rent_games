@@ -1,9 +1,8 @@
 import uuid
-import asyncio
 from backend.config import token, account, site_url
 from yookassa import Configuration, Payment
 from backend.models.payment import Payment as Pay
-from concurrent.futures import ThreadPoolExecutor
+
 
 Configuration.account_id = account
 Configuration.secret_key = token
