@@ -1,15 +1,13 @@
-from .base import Base, async_session
 from typing import AsyncGenerator
+
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import (Column,
-                        Integer,
-                        String,
-                        Boolean,
-                        )
+
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 
+from .base import Base, async_session
 
 class User(SQLAlchemyBaseUserTable[int], Base):
     __tablename__ = 'user'

@@ -1,8 +1,8 @@
 import uuid
-from backend.config import token, account, site_url
-from yookassa import Configuration, Payment
-from backend.models.payment import Payment as Pay
 
+from yookassa import Configuration, Payment
+from backend.config import token, account, site_url
+from backend.models.payment import Payment as Pay
 
 Configuration.account_id = account
 Configuration.secret_key = token
@@ -27,7 +27,7 @@ async def create_pay(order, redirect_url, idempotence_key, formatted_date):
 
 
 async def get_payment(order) -> Pay:
-    redirect_url = site_url + f"/order/"
+    redirect_url = site_url + "/order/"
     idempotence_key = str(uuid.uuid4())
     formatted_date = order.date_created.strftime("%d.%m.%Y")
     payment = await create_pay(order, redirect_url, idempotence_key, formatted_date)

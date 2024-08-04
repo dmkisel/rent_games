@@ -21,5 +21,3 @@ class CartRead(CartBase):
 
     class Config:
         orm_mode = True
-
-

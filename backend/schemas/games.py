@@ -14,7 +14,6 @@ class GameBase(BaseModel):
 
 class GameCreate(GameBase):
     quantity: int
-    pass
 
 
 class GameRead(GameBase):

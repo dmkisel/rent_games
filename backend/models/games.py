@@ -29,4 +29,3 @@ class Game(Base):
             self.is_active = False
         if self.quantity > 0 and self.price > 0:
             self.is_active = True
-        return

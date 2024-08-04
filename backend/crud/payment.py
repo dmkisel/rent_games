@@ -5,8 +5,6 @@ from backend.crud.carts import get_cart_items, get_cart
 from backend.models import Cart
 from backend.models.payment import Order, Payment
 from backend.services.payment.yookassapay import get_payment, update_payment
-from backend.config import site_url
-import uuid
 
 
 async def create_order(db: AsyncSession,
@@ -16,7 +14,7 @@ async def create_order(db: AsyncSession,
     db_cart = await get_cart_items(db, user_id)
     cart = await get_cart(db, user_id)
     amount = float()
-    contain = dict()
+    contain = {}
     for cart_item in db_cart:
         amount += cart_item.price
         contain[cart_item.id] = cart_item.price

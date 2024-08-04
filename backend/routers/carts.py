@@ -10,13 +10,6 @@ from backend.crud.carts import (get_cart_items,
                                 add_items,
                                 del_games_cart)
 
-'''
-1. Просмотр корзины
-2. Добавление в корзину
-3. Удаление из корзины
-
-'''
-
 cart_router = APIRouter()
 
 

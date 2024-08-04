@@ -1,5 +1,7 @@
-from aiosmtplib import send
 from email.message import EmailMessage
+
+from aiosmtplib import send
+
 from backend.config import rent_game_user, rent_game
 from backend.services.smtp.schemas import EmailSchema
 

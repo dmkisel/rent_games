@@ -13,14 +13,6 @@ from backend.crud.games import (create_game,
                                 get_game,
                                 get_games,
                                 update_game)
-'''
-1. Просмотр игр
-2. Просмотр карточки игр
-3. Добавление игр (админ)
-4. Редактирование
-5. Удаление игр
-
-'''
 
 game_router = APIRouter()
 
@@ -48,6 +40,9 @@ async def get_game_by_id(game_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @game_router.put("/{game_id}/", response_model=GameRead)
-async def update_games(game_id: int, up_game: GameCreate, user: User = Depends(current_superuser), db: AsyncSession = Depends(get_db)):
+async def update_games(game_id: int,
+                       up_game: GameCreate,
+                       user: User = Depends(current_superuser),
+                       db: AsyncSession = Depends(get_db)):
     db_game = await update_game(db, up_game)
     return db_game
